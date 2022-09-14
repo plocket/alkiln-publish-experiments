@@ -1,0 +1,5 @@
+# Everyone's node modules dir
+node_modules/
+# Just our root package-lock.json to preserve the one we
+# want to copy for our users
+/package-lock.json

@@ -1,0 +1,52 @@
+name: Publish a new version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: True
+        description: 'Number representing the version to release'
+      tag:
+        required: True
+        description: 'Use "dev" if this is not supposed to be the "latest" version that gets pulled by everyone'
+        default: 'latest'
+      comment:
+        required: True
+        description: 'The entry for the changelog'
+        # Remove default once this is ready
+        default: 'Update'
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    name: Release new version
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Find and replace the ALKiln version in the developer's folder
+      # in package.json and install package-lock.json. In our action.yml
+      # we'll need to use `npm ci` instead of `npm install`
+      - name: Update users' package-lock.json
+        run: |
+          cd user_files
+          npm install --save-exact @suffolklitlab/alkiln@${{ github.event.inputs.version }}
+          cd ..
+        shell: bash
+      - name: Set up tmate session
+        uses: mxschmitt/action-tmate@v3
+      ## Set our package version, publish on npm, push with tag
+      ## Do the other action with somehow the same version
+      #- name: Bump, publish, and release gh tag
+      #  uses: MeilCli/bump-release-action@v1
+      #  with:
+      #    config_path: '.github/bump.yml'
+      #    bump: ${{ github.event.inputs.bump }}
+      #    dry_run: ${{ github.event.inputs.dry_run }}
+      #    draft: ${{ github.event.inputs.draft }}
+      #    pre_release: ${{ github.event.inputs.pre_release }}
