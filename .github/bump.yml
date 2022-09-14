@@ -1,1 +1,4 @@
-# TBD
+branch:
+  # This has to be changed every time the default branch is changed
+  base-branch: 'main'
+  
