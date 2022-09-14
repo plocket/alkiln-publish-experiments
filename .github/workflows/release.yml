@@ -35,7 +35,11 @@ jobs:
       - name: Update users' package-lock.json
         run: |
           cd user_files
+          # In our folder user_files, this will create the necessary version
+          # of ALKiln that we will later copy for our users, as well as the
+          # whole package-lock.json
           npm install --save-exact @suffolklitlab/alkiln@${{ github.event.inputs.version }}
+          # Get back to the root folder again to do other release stuff
           cd ..
         shell: bash
       - name: Set up tmate session
