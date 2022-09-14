@@ -3,9 +3,14 @@ name: Publish a new version
 on:
   workflow_dispatch:
     inputs:
+      bump:
+        required: True
+        description: 'major, minor, patch'
+        default: 'patch'
       version:
         required: True
         description: 'Number representing the version to release'
+        default: '4.9.2'
       tag:
         required: True
         description: 'Use "dev" if this is not supposed to be the "latest" version that gets pulled by everyone'
@@ -29,28 +34,45 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # Find and replace the ALKiln version in the developer's folder
-      # in package.json and install package-lock.json. In our action.yml
-      # we'll need to use `npm ci` instead of `npm install`
-      - name: Update users' package-lock.json
+      # Set our package version, publish on npm, push with tag
+      # Do the other action with somehow the same version
+      - name: Get new version
+        id: bump
+        uses: MeilCli/bump-release-action@v1
+        with:
+          config_path: '.github/bump.yml'
+          bump: ${{ github.event.inputs.bump }}
+          dry_run: true
+          #draft: false
+          #pre_release: false
+      - name: Echo outputs
         run: |
-          cd user_files
-          # In our folder user_files, this will create the necessary version
-          # of ALKiln that we will later copy for our users, as well as the
-          # whole package-lock.json
-          npm install --save-exact @suffolklitlab/alkiln@${{ github.event.inputs.version }}
-          # Get back to the root folder again to do other release stuff
-          cd ..
-        shell: bash
+          echo ${{ steps.bump.outputs.current_version.value }}
+          echo ${{ steps.bump.outputs.next_version.value }}
+          echo ${{ steps.bump.outputs.release.value }}
       - name: Set up tmate session
         uses: mxschmitt/action-tmate@v3
+      ## Find and replace the ALKiln version in the developer's folder
+      ## in package.json and install package-lock.json. In our action.yml
+      ## we'll need to use `npm ci` instead of `npm install`
+      #- name: Update users' package-lock.json
+      #  run: |
+      #    cd user_files
+      #    # In our folder user_files, this will create the necessary version
+      #    # of ALKiln that we will later copy for our users, as well as the
+      #    # whole package-lock.json
+      #    npm install --save-exact @suffolklitlab/alkiln@${{ github.event.inputs.version }}
+      #    # Get back to the root folder again to do other release stuff
+      #    cd ..
+      #  shell: bash
       ## Set our package version, publish on npm, push with tag
       ## Do the other action with somehow the same version
       #- name: Bump, publish, and release gh tag
+      #  id: bump
       #  uses: MeilCli/bump-release-action@v1
       #  with:
       #    config_path: '.github/bump.yml'
       #    bump: ${{ github.event.inputs.bump }}
-      #    dry_run: ${{ github.event.inputs.dry_run }}
-      #    draft: ${{ github.event.inputs.draft }}
-      #    pre_release: ${{ github.event.inputs.pre_release }}
+      #    dry_run: true
+      #    #draft: false
+      #    #pre_release: false
