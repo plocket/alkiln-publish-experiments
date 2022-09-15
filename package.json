@@ -1,6 +1,6 @@
 {
   "name": "alkiln-publish-experiments",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Experimenting with using actions to publish to npm and do a bunch of other stuff at the same time.",
   "main": "index.js",
   "scripts": {
