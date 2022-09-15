@@ -50,8 +50,8 @@ jobs:
           echo ${{ steps.bump.outputs.current_version }}
           echo ${{ steps.bump.outputs.next_version }}
           echo ${{ steps.bump.outputs.release }}
-      #- name: Set up tmate session
-      #  uses: mxschmitt/action-tmate@v3
+      - name: Set up tmate session
+        uses: mxschmitt/action-tmate@v3
       ## Find and replace the ALKiln version in the developer's folder
       ## in package.json and install package-lock.json. In our action.yml
       ## we'll need to use `npm ci` instead of `npm install`
@@ -61,7 +61,7 @@ jobs:
       #    # In our folder user_files, this will create the necessary version
       #    # of ALKiln that we will later copy for our users, as well as the
       #    # whole package-lock.json
-      #    npm install --save-exact @suffolklitlab/alkiln@${{ github.event.inputs.version }}
+      #    npm install --save-exact @suffolklitlab/alkiln@${{ steps.bump.outputs.next_version }}
       #    # Get back to the root folder again to do other release stuff
       #    cd ..
       #  shell: bash
