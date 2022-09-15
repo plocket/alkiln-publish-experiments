@@ -42,7 +42,7 @@ jobs:
         with:
           config_path: '.github/bump.yml'
           bump: ${{ github.event.inputs.bump }}
-          dry_run: true
+          dry_run: false
           #draft: false
           #pre_release: false
       - name: Echo outputs
