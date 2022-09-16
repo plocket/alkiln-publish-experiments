@@ -1,4 +1,11 @@
 branch:
   # This has to be changed every time the default branch is changed
   base-branch: 'main'
-  
+  version-branch-prefix: 'release_'
+release:
+  title-prefix: 'v'
+  title-postfix: ' Released'
+  body-title: 'See CHANGELOG.md for release notes'
+  # body-when-empty-changes: 'No changes'
+  # initial-version: '0.0.1'
+  tag-prefix: 'v'

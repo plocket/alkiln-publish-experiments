@@ -1,5 +1,5 @@
 {
-  "name": "alkiln-publish-experiments",
+  "name": "@plocket/alkiln-publish-experiments",
   "version": "0.1.0",
   "description": "Experimenting with using actions to publish to npm and do a bunch of other stuff at the same time.",
   "main": "index.js",
